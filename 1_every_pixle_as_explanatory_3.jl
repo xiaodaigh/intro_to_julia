@@ -4,11 +4,11 @@ using Base.Iterators: repeated, partition
 using CuArrays # arrays that work on GPU
 using ColorTypes
 # load the images
-const imgs = MNIST.images()
+imgs = MNIST.images()
 
 # images
-const raw_labels = MNIST.labels()
-const labels = onehotbatch(raw_labels, 0:9)
+raw_labels = MNIST.labels()
+labels = onehotbatch(raw_labels, 0:9)
 
 import Base.Iterators: product
 
@@ -19,11 +19,11 @@ create_avg_img_diff(digit) = begin
    avg_imgs0 = reduce(+, float.(imgs0))./length(imgs0)
 end
 
-const avg_images = reshape(reduce(hcat, vec.(create_avg_img_diff.(0:9))), 28, 28, 10)
+avg_images = reshape(reduce(hcat, vec.(create_avg_img_diff.(0:9))), 28, 28, 10)
 
-const imgs_test = MNIST.images(:test)
-const raw_labels_test = MNIST.labels(:test)
-const labels_test = onehotbatch(raw_labels_test, 0:9)
+imgs_test = MNIST.images(:test)
+raw_labels_test = MNIST.labels(:test)
+labels_test = onehotbatch(raw_labels_test, 0:9)
 
 compute_similarity_to_avg(avg_images, test_img) = begin
    errs = [sum((test_img .- avg_images[:,:,i]).^2) for i=1:10]
